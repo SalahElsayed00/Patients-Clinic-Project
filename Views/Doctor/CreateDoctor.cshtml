@@ -1,0 +1,60 @@
+﻿@model DoctorVM
+@{
+    ViewData["Title"] = "Create Doctor";
+}
+
+<h1>Create Doctor</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if (ViewData["DoctorExist"] is not null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewData["DoctorExist"]
+            </div>
+        }
+        <form asp-action="CreateDoctor" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Speciality" class="control-label"></label>
+                <input asp-for="Speciality" type="text" class="form-control"/>
+                <span asp-validation-for="Speciality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" type="number" class="form-control" maxlength="14" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" type="email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClinicId" class="control-label"></label>
+                <select asp-for="ClinicId" class="form-control" asp-items="@(new SelectList(Model.Clinics,"Id","Name"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="ClinicId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-outline-primary" />
+                <a type="button" asp-action="Index" class="btn btn-outline-warning">List Of Doctor</a>
+                <a type="button" asp-action="CreateSchedules" asp-controller="Schedule" class="btn btn-outline-info">Create Schedule</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
