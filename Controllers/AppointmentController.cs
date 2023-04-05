@@ -26,8 +26,8 @@ namespace PatientsClinicProject.Controllers
 
         public IActionResult Index()
         {
-            var appointment = _context.Appointments.Include(x=>x.Doctor)
-                .OrderBy(a => a.DoctorId).ThenBy(a =>a.AppointmentDate)
+            var appointment = _context.Appointments.Include(x => x.Doctor)
+                .OrderBy(a => a.DoctorId).ThenBy(a => a.AppointmentDate)
                 .ToList();
 
             var getAppointmentVM = _mapper.Map<IEnumerable<GetAppointmentVM>>(appointment);
@@ -35,19 +35,45 @@ namespace PatientsClinicProject.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetAppointmentWithFilter()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetAppointmentWithFilter(int id,FilterVM filterVM)
+        {
+            var appointmentFilteration = _context.Appointments
+                .Where(x => x.DoctorId == id &&
+                            x.AppointmentDate >= filterVM.StartDate &&
+                            x.AppointmentDate <= filterVM.EndDate)
+                .ToList();
+
+            var appointmentFilterationVM = _mapper.Map<IEnumerable<AppointmentDoctorVM>>(appointmentFilteration);
+
+            if (appointmentFilteration.Count <= 0)
+            {
+                ViewData["FilterNotExist"] = "There is No appointment With This Date";
+                return View(nameof(GetByDoctorId), appointmentFilterationVM);
+            }
+
+            return View(nameof(GetByDoctorId), appointmentFilterationVM);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetByDoctorId(int Id)
         {
             var doctorAppointment = await _context.Appointments
-                .Where(x => x.DoctorId == Id)
+                .Where(x => x.DoctorId == Id && x.AppointmentDate.Date == DateTime.Today)
                 .ToListAsync();
 
-            if (doctorAppointment is null)
+            var doctorAppointmentVM = _mapper.Map<IEnumerable<AppointmentDoctorVM>>(doctorAppointment);
+
+            if (doctorAppointment.Count <= 0)
             {
                 ViewData["DoctorNotExist"] = "this doctor not have appointment";
-                return View();
+                return View(doctorAppointmentVM);
             }
-
-            var doctorAppointmentVM = _mapper.Map<IEnumerable<AppointmentDoctorVM>>(doctorAppointment);
 
             return View(doctorAppointmentVM);
         }

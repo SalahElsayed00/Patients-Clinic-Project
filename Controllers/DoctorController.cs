@@ -15,7 +15,7 @@ namespace PatientsClinicProject.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public DoctorController(ApplicationDbContext context,IMapper mapper)
+        public DoctorController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -28,7 +28,7 @@ namespace PatientsClinicProject.Controllers
                 .Include(x => x.Clinic)
                 .OrderBy(x => x.ClinicId)
                 .ThenBy(x => x.Name)
-                .ThenBy(x =>x.Speciality)
+                .ThenBy(x => x.Speciality)
                 .ToList();
 
             var allDoctors = _mapper.Map<IEnumerable<GetAllDoctorVM>>(doctors);
@@ -38,7 +38,8 @@ namespace PatientsClinicProject.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateDoctor()
         {
-            var doctorVM = new DoctorVM { 
+            var doctorVM = new DoctorVM
+            {
                 Clinics = await _context.Clinics.ToListAsync(),
             };
             return View(doctorVM);

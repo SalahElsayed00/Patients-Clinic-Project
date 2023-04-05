@@ -1,0 +1,47 @@
+﻿@model FilterVM
+@{
+    ViewData["Title"] = "CreateAppointment";
+}
+
+<h1>Appointment Filteration</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="GetAppointmentWithFilter" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <br />
+                <input asp-for="StartDate" class="form-control"
+                       type="datetime-local"
+                       asp-format="{0:yyyy-MM-ddTHH:mm}"
+                       name="StartDate"
+                       min="2000-01-01" max="2090-1-1" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <br />
+                <input asp-for="EndDate" class="form-control"
+                       type="datetime-local"
+                       asp-format="{0:yyyy-MM-ddTHH:mm}"
+                       name="EndDate"
+                       min="2000-01-01" max="2090-1-1" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+                <a type="button" asp-action="Index" class="btn btn-warning">List Of Appointment</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -6,7 +6,7 @@
 
 <h1>Get All Doctors</h1>
 
-
+<br />
 <table class="table table-striped table-hover">
 
     <thead>
@@ -27,6 +27,8 @@
                 @Html.DisplayNameFor(model =>model.ClinicName)
             </th>
             <th></th>
+            <th></th>
+
         </tr>
     </thead>
     <tbody>
@@ -40,8 +42,10 @@
                 <td>@item.ClinicName</td>
                 <td>
                 <td><a asp-action="GetByDoctorId" asp-controller="Appointment" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="bi bi-camera-reels"></i>Appointment Details</a></td>
+                <td><a asp-action="GetAppointmentWithFilter" asp-controller="Appointment" asp-route-id="@item.Id" class="btn btn-outline-secondary"><i class="bi bi-camera-reels"></i>Details With Filter</a></td>
+
             </tr>
-            
+
         }
     </tbody>
 </table>
